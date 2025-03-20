@@ -2,9 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('drawingCanvas');
     const ctx = canvas.getContext('2d');
     
-    // Set canvas size
-    canvas.width = 800;
-    canvas.height = 600;
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    // Initial resize
+    resizeCanvas();
+    
+    // Resize canvas when window is resized
+    window.addEventListener('resize', resizeCanvas);
     
     // Drawing state
     let isDrawing = false;
@@ -19,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
     colorButtons.forEach(button => {
         button.addEventListener('click', () => {
             currentColor = button.dataset.color;
+            if (currentMode === 'fill') {
+                fillCanvas(currentColor);
+            }
         });
     });
     
@@ -40,7 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Clear canvas
     document.getElementById('clearCanvas').addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     });
     
     // Save drawing
@@ -51,14 +65,25 @@ document.addEventListener('DOMContentLoaded', () => {
         link.click();
     });
     
+    // Fill canvas function
+    function fillCanvas(color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
     // Drawing functions
     function startDrawing(e) {
         isDrawing = true;
         [lastX, lastY] = getCoordinates(e);
+        
+        if (currentMode === 'fill') {
+            fillCanvas(currentColor);
+        }
     }
     
     function draw(e) {
         if (!isDrawing) return;
+        if (currentMode === 'fill') return;
         
         const [currentX, currentY] = getCoordinates(e);
         
@@ -76,9 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.lineWidth = brushSize;
             ctx.lineCap = 'round';
             ctx.stroke();
-        } else if (currentMode === 'fill') {
-            ctx.fillStyle = currentColor;
-            ctx.fillRect(currentX - brushSize/2, currentY - brushSize/2, brushSize, brushSize);
         }
         
         [lastX, lastY] = [currentX, currentY];
@@ -90,8 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function getCoordinates(e) {
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
         return [x, y];
     }
     
