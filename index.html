@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing Canvas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="drawingCanvas"></canvas>
+        </div>
+        <div class="tools-panel">
+            <h2>Drawing Tools</h2>
+            <div class="color-options">
+                <h3>Colors</h3>
+                <div class="color-grid">
+                    <button class="color-btn" style="background-color: #000000;" data-color="#000000"></button>
+                    <button class="color-btn" style="background-color: #FF0000;" data-color="#FF0000"></button>
+                    <button class="color-btn" style="background-color: #00FF00;" data-color="#00FF00"></button>
+                    <button class="color-btn" style="background-color: #0000FF;" data-color="#0000FF"></button>
+                    <button class="color-btn" style="background-color: #FFFF00;" data-color="#FFFF00"></button>
+                    <button class="color-btn" style="background-color: #FF00FF;" data-color="#FF00FF"></button>
+                    <button class="color-btn" style="background-color: #00FFFF;" data-color="#00FFFF"></button>
+                    <button class="color-btn" style="background-color: #FFFFFF;" data-color="#FFFFFF"></button>
+                </div>
+                <div class="brush-size">
+                    <h3>Brush Size</h3>
+                    <input type="range" id="brushSize" min="1" max="50" value="5">
+                </div>
+            </div>
+            <div class="drawing-modes">
+                <h3>Drawing Modes</h3>
+                <button class="mode-btn active" data-mode="draw">Draw</button>
+                <button class="mode-btn" data-mode="eraser">Eraser</button>
+                <button class="mode-btn" data-mode="fill">Fill</button>
+            </div>
+            <div class="actions">
+                <button id="clearCanvas">Clear Canvas</button>
+                <button id="saveDrawing">Save Drawing</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
